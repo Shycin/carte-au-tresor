@@ -1,13 +1,16 @@
+import { match } from 'assert';
 import Mapping from './class/map';
 import DirectoryParser from './utils/file/directoryParser';
 import FileReader from './utils/file/fileParser';
+import FileWriter from './utils/file/fileWriter';
 import LineReader from './utils/file/lineParser';
 
 
 function GenerateGame() {
 
     const allFile = DirectoryParser()
-    allFile.forEach((file) => {
+
+    allFile.filter((file) => file.match(/^game_.*/)).forEach((file) => {
         console.log("Start New Game")
         const newGameObject = LineReader(FileReader(file))
 
@@ -22,8 +25,16 @@ function GenerateGame() {
 
 
             map.startAdventure()
-            console.log(map.mapAdventurer)
-            console.log(map.mapTreasure)
+
+            const solveFile = []
+
+            solveFile.push(`C - ${map.mapSize.x} - ${map.mapSize.y}`)
+            map.mapMountain.forEach((each) => solveFile.push(`M - ${each.x} - ${each.y}`))
+            map.mapTreasure.forEach((each) => solveFile.push(`T - ${each.x} - ${each.y} - ${each.treasureCount}`))
+            map.mapAdventurer.forEach((each) => solveFile.push(`A - ${each.name} - ${each.x} - ${each.y} - ${each.direction} - ${each.treasureCount}`))
+
+
+            FileWriter(file, solveFile)
         }
 
 
