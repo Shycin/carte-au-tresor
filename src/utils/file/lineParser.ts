@@ -1,4 +1,4 @@
-import { ICoordonate, ICoordonateAdventurer, ICoordonateTreasure, IDirection, ILineParser, ISize } from "../../constants/function.dto";
+import { ICoordonate, ICoordonateAdventurer, ICoordonateTreasure, ILineParser, ISize } from "../../constants/function.dto";
 import { isAdventurer, isAxisCorrect, isTreasure } from "../tileMap";
 
 function LineReader(lines: string[]): ILineParser {
