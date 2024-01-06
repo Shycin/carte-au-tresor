@@ -2,10 +2,18 @@
   "name": "carte-au-tresor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "module": "commonjs",
+  "main": "./src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "dev": "ts-node --esm ./src/index.ts"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "jest": "^29.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
 }
