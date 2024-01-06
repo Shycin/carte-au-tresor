@@ -1,28 +1,20 @@
 import { settings } from "../constants/settings";
-import { IAdventurer, ICoordonate, ISize, ITileAdventurer, ITileBase, ITileTreasure, ITreasure } from "../constants/function.dto";
+import { IAdventurer, ICoordonate, ISize, ITreasure, IDirection } from "../constants/function.dto";
 
-export function tileMap({ x, y, isBlocking, type }: ITileBase) {
-    return {
-        x,
-        y,
-        isBlocking,
-        type
-    }
-}
+export const isMoveCorrect = (move: string) => !!settings.correctMove.includes(move)
 
-export const isMoveCorrect = (move: string) => !!settings.correctMove.find((eachMove) => move.split('').includes(eachMove))
-
+export const isDirectionCorrect = ({ direction }: IDirection) => settings.correctCoordinate.includes(direction)
 export const isAxisCorrect = ({ x, y }: ISize) => (x >= 0 && Number.isInteger(x)) && (y >= 0 && Number.isInteger(y))
-export const isTreasure = ({ x, y, treasureCount }: ICoordonate & ITreasure) => isAxisCorrect({ x, y }) && treasureCount > 0
-export const isAdventurer = ({ x, y, name, direction, move }: ICoordonate & IAdventurer) => isAxisCorrect({ x, y }) && name.length > 0 && direction && move
+export const isTreasure = ({ x, y, treasureCount }: ICoordonate & ITreasure) => isAxisCorrect({ x, y }) && treasureCount > 0 && Number.isInteger(treasureCount)
+export const isAdventurer = ({ x, y, name, direction, move }: ICoordonate & IAdventurer) => isAxisCorrect({ x, y }) && name.length > 0 && direction !== null && move !== null
 
-export const nextCase = ({ currentPosition, direction }: { currentPosition: { x: number, y: number }, direction: 'S' | 'N' | 'O' | 'E' }) => {
+export const nextCase = ({ x, y, direction }: { x: number, y: number, direction: 'S' | 'N' | 'O' | 'E' }) => {
     const valueInteger = direction === "S" || direction === "E" ? 1 : (direction === "N" || direction === "O" ? -1 : null)
 
     if (valueInteger)
-        direction === "N" || direction === "S" ? currentPosition.y += valueInteger : (direction === "O" || direction === "E" ? currentPosition.x += valueInteger : null)
+        direction === "N" || direction === "S" ? y += valueInteger : (direction === "O" || direction === "E" ? x += valueInteger : null)
 
-    return currentPosition
+    return { x, y }
 
 }
 
