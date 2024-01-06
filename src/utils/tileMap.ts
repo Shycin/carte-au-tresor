@@ -9,10 +9,19 @@ export const isTreasure = ({ x, y, treasureCount }: ICoordonate & ITreasure) => 
 export const isAdventurer = ({ x, y, name, direction, move }: ICoordonate & IAdventurer) => isAxisCorrect({ x, y }) && name.length > 0 && direction !== null && move !== null
 
 export const nextCase = ({ x, y, direction }: { x: number, y: number, direction: 'S' | 'N' | 'O' | 'E' }) => {
-    const valueInteger = direction === "S" || direction === "E" ? 1 : (direction === "N" || direction === "O" ? -1 : null)
+    let valueInteger = null
+    if (direction === "S" || direction === "E") valueInteger = 1
+    if (direction === "N" || direction === "O") valueInteger = -1
 
-    if (valueInteger)
-        direction === "N" || direction === "S" ? y += valueInteger : (direction === "O" || direction === "E" ? x += valueInteger : null)
+
+    if (valueInteger) {
+        if (direction === "N" || direction === "S") {
+            y += valueInteger
+        }
+        else if (direction === "O" || direction === "E") {
+            x += valueInteger
+        }
+    }
 
     return { x, y }
 
