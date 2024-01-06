@@ -1,0 +1,11 @@
+C - 3 - 4
+M - 1 - 0
+M - 2 - 1
+T - 1 - 2 - 2
+T - 0 - 3 - 2
+T - 1 - 3 - 3
+A - Lara - 1 - 1 - S - AADADAGGA
+A - LarB - 2 - 1 - S - AADADAGGA
+A - LarC - 1 - 2 - S - AADADAGGA
+A - Bata - 0 - 2 - N - AADADAGGA
+A - Ceta - 2 - 2 - N - AADADAGGADDAGADAAAGGGAA
