@@ -1,19 +1,11 @@
 import { ICoordonate, ICoordonateAdventurer, ICoordonateTreasure, IMove, ISize, ITileAdventurer, ITileBase, ITileTreasure } from "../constants/function.dto"
 import { settings } from "../constants/settings";
-import { generateAdventurer, generateMountain, generatePlain, generateTreasure } from "../constants/typeTile";
-import { isAdventurer, isAxisCorrect, isMoveCorrect, isTreasure, nextCase, tileMap } from "../utils/tileMap";
-
-
-const initialize2DArray = (width: number, height: number) =>
-    Array.from({ length: height }).map((y, indexY) =>
-        Array.from({ length: width }).map((x, indexX) => tileMap(generatePlain({ x: indexX, y: indexY })))
-    );
+import { generateAdventurer, generateMountain, generateTreasure } from "../constants/typeTile";
+import { isAdventurer, isAxisCorrect, isMoveCorrect, isTreasure, nextCase } from "../utils/tileMap";
 
 
 class Mapping {
 
-    // valeurs pour définir les endroits accessiible ou non (ex: plaine = accessible // montagne = non accessible)
-    //mapGame: ITileBase[][] = []
     mapSize: ISize = { x: 0, y: 0 }
 
     mapMountain: ITileBase[] = []
@@ -26,18 +18,16 @@ class Mapping {
     constructor({ x, y }: ISize) {
         this.mapSize.x = x
         this.mapSize.y = y
-
-        //this.mapGame = initialize2DArray(x, y)
     }
 
 
 
 
     isInMap({ x, y }: ICoordonate) {
-        return x < this.mapSize.x && y < this.mapSize.y
+        return x < this.mapSize.x && y < this.mapSize.y && isAxisCorrect({ x, y })
     }
 
-    getAllElementsInMap(): ITileBase[] {
+    getAllElementsInMap(): ITileBase[] | ITileTreasure[] | ITileAdventurer[] {
         return [
             ...this.mapMountain,
             ...this.mapTreasure,
@@ -52,27 +42,25 @@ class Mapping {
 
 
 
+    isInstantiable(coordinate: ICoordonate) {
+        const { x, y } = coordinate
+        return !this.getAllElementsIsBlockingInMap().find((element) => element.x === x && element.y === y) && this.isInMap({ x: x, y: y })
+    }
 
     initMontagneTile(newTileMontagne: ICoordonate) {
-        if (isAxisCorrect(newTileMontagne)) {
-
-            const { x, y } = newTileMontagne
+        if (isAxisCorrect(newTileMontagne) && this.isInstantiable(newTileMontagne)) {
             const newMountain = generateMountain(newTileMontagne)
-
             this.mapMountain.push(newMountain)
-
-            /*if (this.isInMap({ x, y }))
-                this.mapGame[y][x] = newMountain as ITileBase*/
         }
     }
 
     initTreasureTile(newTileTreasure: ICoordonateTreasure) {
-        if (isTreasure(newTileTreasure))
+        if (isTreasure(newTileTreasure) && this.isInstantiable(newTileTreasure))
             this.mapTreasure.push(generateTreasure(newTileTreasure))
     }
 
     initAdventurerTile(newTileAdventurer: ICoordonateAdventurer) {
-        if (isAdventurer(newTileAdventurer)) {
+        if (isAdventurer(newTileAdventurer) && this.isInstantiable(newTileAdventurer)) {
             const newMountain = generateAdventurer(newTileAdventurer)
 
             this.mapAdventurer.push(newMountain)
@@ -109,7 +97,7 @@ class Mapping {
 
         const { x, y, direction, uuid } = adventurer
 
-        const newPosition = nextCase({ currentPosition: { x, y }, direction })
+        const newPosition = nextCase({ x, y, direction })
         const isValidNewPosition = this.isInMap({ x: newPosition.x, y: newPosition.y })
 
 
