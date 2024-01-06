@@ -122,6 +122,10 @@ class Mapping {
                     return treasure
                 })
 
+                this.mapTreasure = this.mapTreasure.filter((treasure) => {
+                    return treasure.treasureCount > 0;
+                });
+
                 return newAdventurer
             }
         }
