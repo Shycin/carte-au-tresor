@@ -1,79 +1,30 @@
-import { ICoordonate, ICoordonateAdventurer, ICoordonateTreasure, ILineParser, ISize } from "../../constants/function.dto";
-import { isAdventurer, isAxisCorrect, isTreasure } from "../tileMap";
+import { ICoordonate, ILineParser, ISize } from "../../constants/function.dto";
+import { ICoordonateAdventurer } from "../../constants/tileAdventurer.dto";
+import { ICoordonateTreasure } from "../../constants/tileTreasure.dto";
+import { detectTypeTile } from "../tileMap";
 
 function LineReader(lines: string[]): ILineParser {
     let carteValues: ISize | null = null
+
     const treasureValues: ICoordonateTreasure[] = []
     const montagneValues: ICoordonate[] = []
     const aventurierValues: ICoordonateAdventurer[] = []
 
     lines.forEach((line) => {
+        const lineDetected = detectTypeTile(line)
+        const type = line.split(' - ')
 
-        const partLine = line.split(' - ')
+        if (lineDetected) {
+            //Détect la première lettre pour pouvoir assigner les résultats précis au bon tableau
+            switch (type[0]) {
+                case "C": carteValues = lineDetected; break;
 
-        switch (partLine[0]) {
-            case "C":
-                // Carte portion
-                if (isAxisCorrect({
-                    x: Number(partLine[1]),
-                    y: Number(partLine[2])
-                })) {
-                    carteValues = {
-                        x: Number(partLine[1]),
-                        y: Number(partLine[2])
-                    }
-                }
+                case "T": treasureValues.push(lineDetected as ICoordonateTreasure); break;
 
-                break;
+                case "M": montagneValues.push(lineDetected as ICoordonate); break;
 
-            case "T":
-                // Trésor portion
-                if (isTreasure({
-                    x: Number(partLine[1]),
-                    y: Number(partLine[2]),
-                    treasureCount: Number(partLine[3]),
-                })) {
-                    treasureValues.push({
-                        x: Number(partLine[1]),
-                        y: Number(partLine[2]),
-                        treasureCount: Number(partLine[3])
-                    })
-                }
-                break;
-
-            case "M":
-                // Montagne portion
-                if (isAxisCorrect({
-                    x: Number(partLine[1]),
-                    y: Number(partLine[2]),
-                })) {
-                    montagneValues.push({
-                        x: Number(partLine[1]),
-                        y: Number(partLine[2])
-                    })
-                }
-                break;
-
-            case "A":
-                // Aventurier portion
-                if (isAdventurer({
-                    name: partLine[1],
-                    x: Number(partLine[2]),
-                    y: Number(partLine[3]),
-                    direction: partLine[4] as 'S' | 'N' | 'O' | 'E',
-                    move: partLine[5]
-                })) {
-                    aventurierValues.push({
-                        name: partLine[1],
-                        x: Number(partLine[2]),
-                        y: Number(partLine[3]),
-                        direction: partLine[4] as 'S' | 'N' | 'O' | 'E',
-                        move: partLine[5]
-                    })
-                }
-
-
-                break;
+                case "A": aventurierValues.push(lineDetected as ICoordonateAdventurer); break;
+            }
         }
     })
 

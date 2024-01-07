@@ -1,8 +1,7 @@
-import { settings } from '../../constants/settings';
 import fs from 'fs';
 
-function DirectoryReader(): string[] {
-    return fs.readdirSync(settings.gameFolder);
+function DirectoryReader(directory: string): string[] {
+    return fs.readdirSync(directory);
 }
 
 export default DirectoryReader

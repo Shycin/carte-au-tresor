@@ -1,10 +1,14 @@
-import { settings } from '../../constants/settings';
 import fs from 'fs';
 
 function FileWriter(filename: string, lines: string[]): boolean {
     const file = lines.join('\r\n')
 
-    fs.writeFileSync(`${settings.gameFolder}/solve_${filename}`, file);
+    try {
+        fs.writeFileSync(filename, file);
+    } catch (error) {
+        return false
+    }
+
 
     return true
 }
