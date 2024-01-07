@@ -9,5 +9,6 @@ module.exports = {
     '!**/__tests__/**',
     '!**/node_modules/**',
     '!**/vendor/**',
+    '!./src/index.ts',
   ],
 };
