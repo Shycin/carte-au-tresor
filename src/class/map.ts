@@ -73,7 +73,7 @@ class Mapping {
 
     //ajout d'une case trésor, vérification si il peut se trouver dans le tableau, que c'est bien un trésor et que aucun trésor ne s'y trouve déjà
     addTreasureTile(newTileTreasure: ICoordonateTreasure) {
-        if (this.isInMap(newTileTreasure) && isTreasure(newTileTreasure) && this.get_Treasure().find((treasure) => treasure.x === newTileTreasure.x && treasure.y === newTileTreasure.y && treasure.treasureCount > 0))
+        if (this.isInMap(newTileTreasure) && isTreasure(newTileTreasure) && !this.get_Treasure().find((treasure) => treasure.x === newTileTreasure.x && treasure.y === newTileTreasure.y && treasure.treasureCount > 0))
             this.mapTreasure.push(generateTreasure(newTileTreasure))
     }
 
